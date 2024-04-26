@@ -1,3 +1,4 @@
+from __future__ import print_function
 #!/usr/bin/python3
 
 def pascal_triangle(n):
@@ -14,7 +15,7 @@ def pascal_triangle(n):
                 row.append(triangle[i - 1][j - 1] + triangle[i - 1][j])
         triangle.append(row)
     return triangle
-# Test the function
+""" Test the function"""
 def print_triangle(triangle):
     for row in triangle:
         print("[{}]".format(",".join([str(x) for x in row])))
