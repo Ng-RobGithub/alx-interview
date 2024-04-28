@@ -1,5 +1,4 @@
 from __future__ import print_function
-#!/usr/bin/python3
 
 def pascal_triangle(n):
     if n <= 0:
