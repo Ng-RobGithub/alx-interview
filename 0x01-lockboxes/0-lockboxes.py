@@ -2,7 +2,7 @@
 
 def canUnlockAll(boxes):
     """
-    Determines if all the boxes can be opened.
+    Determines if all boxes can be opened.
 
     Args:
         boxes (list): A list of lists representing the boxes and their keys.
@@ -10,21 +10,20 @@ def canUnlockAll(boxes):
     Returns:
         bool: True if all boxes can be opened, False otherwise.
     """
-
-    """ If no boxes are provided, return False"""
     if not boxes:
         return False
 
-    """ Initialize a set to store keys and a set to store unlocked boxes"""
+    """ Set of keys initially available"""
     keys = set(boxes[0])
+
+    """ Set of unlocked boxes"""
     unlocked = set([0])
 
-    """ Perform a BFS traversal to unlock all possible boxes"""
+    """ Breadth-first search to traverse through boxes and keys"""
     while keys:
         key = keys.pop()
         if key < len(boxes) and key not in unlocked:
             keys.update(boxes[key])
             unlocked.add(key)
 
-    """ Return True if all boxes are unlocked, otherwise False"""
     return len(unlocked) == len(boxes)
