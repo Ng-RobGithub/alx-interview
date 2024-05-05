@@ -15,10 +15,12 @@ def generate_pascal_triangle(n):
         triangle.append(row)
     return triangle
 
+
 def print_triangle(triangle):
     for row in triangle:
         print("[{}]".format(",".join(map(str, row))))
     return triangle
+
 
 if __name__ == "__main__":
     print_triangle(generate_pascal_triangle(5))
