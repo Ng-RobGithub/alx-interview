@@ -1,14 +1,12 @@
 #!/usr/bin/python3
-<<<<<<< HEAD
 """
 A Python module to determine if all boxes can be opened from a list of lists.
 """
-=======
->>>>>>> 73ea719f2861402683ddd8c17a09c4e2909e9334
 
-def canUnlockAll(boxes):
+
+def can_unlock_all(boxes=[]):
     """
-    Determines if all boxes can be opened.
+    Determine if all boxes in the list can be opened.
 
     Args:
         boxes (list): List of lists containing keys in each box.
@@ -19,20 +17,17 @@ def canUnlockAll(boxes):
     if not boxes:
         return False
 
-    """ Set of keys initially available"""
-    keys = set(boxes[0])
+    keys = set([0])
+    for box_id, box in enumerate(boxes):
+        for key in box:
+            if key < len(boxes) and key != box_id:
+                keys.add(key)
 
-    """ Set of unlocked boxes"""
-    unlocked = set([0])
+    if len(keys) != len(boxes):
+        return False
 
-    """ Breadth-first search to traverse through boxes and keys"""
-    while keys:
-        key = keys.pop()
-        if key < len(boxes) and key not in unlocked:
-            keys.update(boxes[key])
-            unlocked.add(key)
+    return True
 
-<<<<<<< HEAD
 
 if __name__ == '__main__':
     boxes = [
@@ -51,6 +46,3 @@ if __name__ == '__main__':
 
     boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
     print(can_unlock_all(boxes))
-=======
-    return len(unlocked) == len(boxes)
->>>>>>> 73ea719f2861402683ddd8c17a09c4e2909e9334
