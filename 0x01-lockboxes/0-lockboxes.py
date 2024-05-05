@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """
-Module to determine if all boxes can be unlocked.
+Script to check if all boxes can be opened.
 """
-
 
 def look_next_opened_box(opened_boxes):
     """
@@ -29,7 +28,7 @@ def can_unlock_all(boxes):
         boxes (list): List containing all the boxes with the keys.
 
     Returns:
-        bool: True if all boxes can be opened, otherwise False.
+        bool: True if all boxes can be opened, otherwise, False.
     """
     if len(boxes) <= 1 or boxes == [[]]:
         return True
@@ -65,9 +64,7 @@ def can_unlock_all(boxes):
 
 
 def main():
-    """
-    Entry point of the script.
-    """
+    """Entry point."""
     can_unlock_all([[]])
 
 
