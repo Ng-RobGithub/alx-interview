@@ -11,3 +11,19 @@ You can assume all keys will be positive integers
 There can be keys that do not have boxes
 The first box boxes[0] is unlocked
 Return True if all boxes can be opened, else return False
+
+# Box Unlocker
+
+This Python module determines if all boxes in a list of lists can be opened.
+
+## Usage
+
+To use this module, call the `can_unlock_all()` function with a list of lists containing keys in each box.
+
+```python
+boxes = [    [1, 3],
+    [2],
+    [3, 0],
+    [1, 2, 3],
+]
+print(can_unlock_all(boxes))
