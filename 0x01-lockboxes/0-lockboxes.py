@@ -1,13 +1,24 @@
 #!/usr/bin/python3
-"""Determines if all boxes can be opened from a list of lists."""
+"""
+A Python module that determines if all boxes can be opened from a list of
+lists.
+"""
 
 
 def can_unlock_all(boxes=[]):
-    """Returns True if all boxes in boxes can be opened."""
+    """
+    Determine if all boxes in the list can be opened.
+
+    Args:
+        boxes (list): A list of lists representing the boxes and their keys.
+
+    Returns:
+        bool: True if all boxes can be opened, False otherwise.
+    """
     if not boxes:
         return False
 
-    keys = {0}
+    keys = set([0])
     for box_id, box in enumerate(boxes):
         for key in box:
             if key < len(boxes) and key != box_id:
@@ -21,7 +32,12 @@ def can_unlock_all(boxes=[]):
 
 if __name__ == '__main__':
     # Test cases
-    boxes1 = [[1, 3], [2], [3, 0], [1, 2, 3]]
+    boxes1 = [
+        [1, 3],
+        [2],
+        [3, 0],
+        [1, 2, 3],
+    ]
     print(can_unlock_all(boxes1))
 
     boxes2 = [[1], [2], [3], [4], []]
