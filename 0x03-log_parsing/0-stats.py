@@ -1,44 +1,39 @@
 #!/usr/bin/python3
-"""Log Parser"""
+
 import sys
 
+# Initialize variables to store metrics
+total_file_size = 0
+status_code_counts = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0,
+                      500: 0}
 
-if __name__ == '__main__':
-    file_size = [0]
-    status_codes = {200: 0, 301: 0, 400: 0, 401: 0,
-                    403: 0, 404: 0, 405: 0, 500: 0}
+try:
+    line_count = 0
+    for line in sys.stdin:
+        # Split the input line by spaces
+        parts = line.split()
 
-    def print_stats():
-        """ Print statistics """
-        print('File size: {}'.format(file_size[0]))
-        for key in sorted(status_codes.keys()):
-            if status_codes[key]:
-                print('{}: {}'.format(key, status_codes[key]))
+        # Check if the input format matches the expected format
+        if len(parts) == 10 and parts[5].isdigit():
+            status_code = int(parts[8])
+            file_size = int(parts[9])
 
-    def parse_line(line):
-        """ Checks the line for matches """
-        try:
-            line = line[:-1]
-            word = line.split(' ')
-            # File size is last parameter on stdout
-            file_size[0] += int(word[-1])
-            # Status code comes before file size
-            status_code = int(word[-2])
-            # Move through dictionary of status codes
-            if status_code in status_codes:
-                status_codes[status_code] += 1
-        except BaseException:
-            pass
+            # Update metrics
+            total_file_size += file_size
+            status_code_counts[status_code] += 1
 
-    linenum = 1
-    try:
-        for line in sys.stdin:
-            parse_line(line)
-            """ print after every 10 lines """
-            if linenum % 10 == 0:
-                print_stats()
-            linenum += 1
-    except KeyboardInterrupt:
-        print_stats()
-        raise
-    print_stats()
+            line_count += 1
+
+            # Print statistics after every 10 lines
+            if line_count % 10 == 0:
+                print(f"Total file size: File size: {total_file_size}")
+                for code, count in sorted(status_code_counts.items()):
+                    if count > 0:
+                        print(f"{code}: {count}")
+
+except KeyboardInterrupt:
+    # Handle Ctrl+C interruption
+    print(f"Total file size: File size: {total_file_size}")
+    for code, count in sorted(status_code_counts.items()):
+        if count > 0:
+            print(f"{code}: {count}")
