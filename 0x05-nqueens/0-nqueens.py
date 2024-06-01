@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ N queens """
+
 import sys
 
 
@@ -62,6 +63,17 @@ def print_solution(board):
     print()
 
 
-# Example usage
-n = 4
-solve_n_queens(n)
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python3 n_queens.py N")
+        return
+    try:
+        n = int(sys.argv[1])
+    except ValueError:
+        print("N must be a number")
+        return
+    solve_n_queens(n)
+
+
+if __name__ == "__main__":
+    main()
