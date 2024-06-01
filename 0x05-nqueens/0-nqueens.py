@@ -1,57 +1,58 @@
 #!/usr/bin/python3
 """
-N Queens Problem Solver using Backtracking
+N Queens Puzzle Solver using Backtracking
 """
-
 import sys
 
 
-class NQueen:
-    """Class for solving N Queen Problem"""
+class NQueenSolver:
+    """Class to solve the N Queens problem using backtracking."""
 
     def __init__(self, n):
-        """Initialize the board and solution list"""
+        """Initialize the board size and solution storage."""
         self.n = n
-        self.board = [0] * (n + 1)
+        self.positions = [0] * (n + 1)
         self.solutions = []
 
-    def can_place(self, row, col):
+    def can_place(self, current_queen, column):
         """
-        Check if a queen can be placed on the board at (row, col)
+        Check if the current queen can be placed in the given column.
+        Ensures no queens are attacking each other.
         """
-        for i in range(1, row):
-            if self.board[i] == col or \
-               abs(self.board[i] - col) == abs(i - row):
+        for previous_queen in range(1, current_queen):
+            if self.positions[previous_queen] == column or \
+               abs(self.positions[previous_queen] - column) == abs(
+                   previous_queen - current_queen):
                 return False
         return True
 
-    def solve(self, row):
+    def solve(self, current_queen=1):
         """
-        Recursively try to place queens on the board
+        Recursively attempt to place queens on the board.
+        Args:
+            current_queen: The queen to be placed.
         """
-        for col in range(1, self.n + 1):
-            if self.can_place(row, col):
-                self.board[row] = col
-                if row == self.n:
+        for column in range(1, self.n + 1):
+            if self.can_place(current_queen, column):
+                self.positions[current_queen] = column
+                if current_queen == self.n:
+                    # A solution is found
                     self.add_solution()
                 else:
-                    self.solve(row + 1)
+                    # Try to place next queen
+                    self.solve(current_queen + 1)
         return self.solutions
 
     def add_solution(self):
-        """
-        Add the current board configuration to the list of solutions
-        """
+        """Store the current board configuration as a solution."""
         solution = []
-        for i in range(1, self.n + 1):
-            solution.append([i - 1, self.board[i] - 1])
+        for queen in range(1, self.n + 1):
+            solution.append([queen - 1, self.positions[queen] - 1])
         self.solutions.append(solution)
 
 
 def main():
-    """
-    Main function to handle input and start solving the N Queens problem
-    """
+    """Main function to handle input and solve the N Queens problem."""
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
@@ -66,8 +67,8 @@ def main():
         print("N must be at least 4")
         sys.exit(1)
 
-    queen = NQueen(n)
-    solutions = queen.solve(1)
+    solver = NQueenSolver(n)
+    solutions = solver.solve()
 
     for solution in solutions:
         print(solution)
