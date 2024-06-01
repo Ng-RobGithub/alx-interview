@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" N queens """
+"""
+N Queens Problem
+"""
 
 import sys
 
@@ -65,7 +67,7 @@ def print_solution(board):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python3 n_queens.py N")
+        print("Usage: ./n_queens.py N")
         return
     try:
         n = int(sys.argv[1])
