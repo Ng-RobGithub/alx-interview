@@ -1,17 +1,29 @@
 #!/usr/bin/node
+/**
+ * Prints all characters of a Star Wars movie
+ * The first positional argument passed is the Movie ID
+ * Display one character name per line in the same order
+ * as the list in the /films/ endpoint
+ */
 
-const request = require('request');
+const axios = require('axios');
+const filmNum = process.argv[2];
+const filmURL = `https://swapi-api.hbtn.io/api/films/${filmNum}/`;
 
-request('https://swapi-api.hbtn.io/api/films/' + process.argv[2], function (err, res, body) {
-  if (err) throw err;
-  const actors = JSON.parse(body).characters;
-  exactOrder(actors, 0);
-});
-const exactOrder = (actors, x) => {
-  if (x === actors.length) return;
-  request(actors[x], function (err, res, body) {
-    if (err) throw err;
-    console.log(JSON.parse(body).name);
-    exactOrder(actors, x + 1);
-  });
+const getCharacterNames = async (filmURL) => {
+  try {
+    // Fetch the film data
+    const filmResponse = await axios.get(filmURL);
+    const charURLs = filmResponse.data.characters;
+
+    // Fetch and print each character's name
+    for (const charURL of charURLs) {
+      const charResponse = await axios.get(charURL);
+      console.log(charResponse.data.name);
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
 };
+
+getCharacterNames(filmURL);
