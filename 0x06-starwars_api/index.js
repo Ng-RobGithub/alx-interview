@@ -1,63 +1,33 @@
 #!/usr/bin/node
+/**
+ * Prints all characters of a Star Wars movie
+ * The first positional argument passed is the Movie ID
+ * Display one character name per line in the same order
+ * as list in the /films/ endpoint
+ */
 
 const request = require('request');
+const filmNum = process.argv[2] + '/';
+const filmURL = 'https://swapi-api.hbtn.io/api/films/';
 
-// Function to fetch data from the Star Wars API
-function fetchStarWarsCharacters(movieId) {
-  // Endpoint to fetch film details
-  const filmUrl = `https://swapi.dev/api/films/${movieId}/`;
+// Makes API request, sets async to allow await promise
+request(filmURL + filmNum, async (err, res, body) => {
+  if (err) return console.error(err);
 
-  // Make an HTTP GET request to fetch film details
-  request(filmUrl, (error, response, body) => {
-    if (error) {
-      console.error('Error fetching film details:', error);
-      return;
-    }
+  // find URLs of each character in the film as a list obj
+  const charURLList = JSON.parse(body).characters;
 
-    if (response.statusCode !== 200) {
-      console.error('Failed to retrieve film details. Status code:', response.statusCode);
-      return;
-    }
+  // Use URL list to character pages to make new requests
+  // await queues requests until they resolve in order
+  for (const charURL of charURLList) {
+    await new Promise((resolve, reject) => {
+      request(charURL, (err, res, body) => {
+        if (err) return console.error(err);
 
-    // Parse the JSON data
-    const filmData = JSON.parse(body);
-
-    // Check if the film data is valid
-    if (!filmData.characters || filmData.characters.length === 0) {
-      console.log('No characters found for this movie.');
-      return;
-    }
-
-    // Print the movie title
-    console.log(`Characters in "${filmData.title}":`);
-
-    // Fetch and print each character
-    filmData.characters.forEach(characterUrl => {
-      request(characterUrl, (error, response, body) => {
-        if (error) {
-          console.error('Error fetching character details:', error);
-          return;
-        }
-
-        if (response.statusCode !== 200) {
-          console.error('Failed to retrieve character details. Status code:', response.statusCode);
-          return;
-        }
-
-        const characterData = JSON.parse(body);
-        console.log(characterData.name);
+        // finds each character name and prints in URL order
+        console.log(JSON.parse(body).name);
+        resolve();
       });
     });
-  });
-}
-
-// Get the movie ID from command-line arguments
-const movieId = process.argv[2];
-
-if (!movieId) {
-  console.error('Please provide a movie ID as a command-line argument.');
-  process.exit(1);
-}
-
-// Fetch and display characters for the given movie ID
-fetchStarWarsCharacters(movieId);
+  }
+});
